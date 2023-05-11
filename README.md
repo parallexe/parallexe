@@ -17,12 +17,12 @@ go get github.com/parallexe/parallexe
 package main
 
 import (
-    "log"
-    "github.com/parallexe/parallexe"
+	"log"
+	"github.com/parallexe/parallexe"
 )
 
 func main() {
-	hostConfigs := []parallexe.HostConfig{
+    hostConfigs := []parallexe.HostConfig{
 		{
 			Host:   "53.0.0.1",
 			Groups: []string{"prod"},
