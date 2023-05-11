@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-    hostConfigs := []parallexe.HostConfig{
+	hostConfigs := []parallexe.HostConfig{
 		{
 			Host:   "53.0.0.1",
 			Groups: []string{"prod"},
