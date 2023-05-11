@@ -1,4 +1,4 @@
-module parallexe
+module github.com/parallexe/parallexe
 
 go 1.19
 
