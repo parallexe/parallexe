@@ -66,6 +66,7 @@ func New(configs []HostConfig) (*Parallexe, error) {
 	return &p, nil
 }
 
+// AddHost adds a new host to the Parallexe client
 func (p *Parallexe) AddHost(hostConfig HostConfig) error {
 	// Skip createClient if host is localhost
 	for _, localHostValue := range localHostValues {
@@ -92,6 +93,7 @@ func (p *Parallexe) AddHost(hostConfig HostConfig) error {
 	return nil
 }
 
+// Close closes all SSH connections in all HostConnections
 func (p *Parallexe) Close() error {
 	for _, hostConnection := range p.HostConnections {
 		if hostConnection.Client != nil {
