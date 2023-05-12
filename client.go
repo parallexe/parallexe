@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-// createClient creates a new SSH client
+// createClient creates a new SSH client.
 // If sshConfig.PrivateKeyPath and sshConfig.Password are empty, it will try to connect to local SSH agent
 func createClient(addr string, sshConfig *SshConfig) (*ssh.Client, error) {
 	config := &ssh.ClientConfig{
@@ -31,11 +31,11 @@ func createClient(addr string, sshConfig *SshConfig) (*ssh.Client, error) {
 	return conn, nil
 }
 
-// getAuthMethod returns the SSH auth method to use
-// If password is not empty, it will use it
-// If privateKey is not empty, it will use it
-// If privateKeyPath is not empty, it will use it
-// Otherwise, it will try to connect to local SSH agent
+// getAuthMethod returns the SSH auth method to use.
+// If password is not empty, it will use it.
+// If privateKey is not empty, it will use it.
+// If privateKeyPath is not empty, it will use it.
+// Otherwise, it will try to connect to local SSH agent.
 func getAuthMethod(password string, privateKeyPath string, privateKey []byte) ([]ssh.AuthMethod, error) {
 	if len(password) > 0 {
 		return []ssh.AuthMethod{

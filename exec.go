@@ -47,10 +47,10 @@ func (p *Parallexe) Exec(command string, execConfig *ExecConfig) (*CommandRespon
 	return &CommandResponses{HostResponses: commandResponses}, commandError
 }
 
-// MultiExec executes a list of commands on a list of hosts
-// It returns a list of MultiCommandResponses, each one containing the command and the responses for each host
-// If a command fails on a host, the next commands will not be executed on any host
-// Commands not executed on any host will have a status CommandStatusSkip
+// MultiExec executes a list of commands on a list of hosts.
+// It returns a list of MultiCommandResponses, each one containing the command and the responses for each host.
+// If a command fails on a host, the next commands will not be executed on any host.
+// Commands not executed on any host will have a status CommandStatusSkip.
 func (p *Parallexe) MultiExec(commands []string, execConfig *ExecConfig) ([]*MultiCommandResponses, error) {
 	// White list HostSession to execute only on desired hosts
 	filteredHosts := getFilteredHosts(p.HostConnections, execConfig)
@@ -143,8 +143,8 @@ func getFilteredHosts(hostConnections []HostConnection, execConfig *ExecConfig) 
 	return filteredHosts
 }
 
-// remoteExecute executes a command on a remote host
-// If hostSession.Client is nil, run command locally
+// remoteExecute executes a command on a remote host.
+// If hostSession.Client is nil, run command locally.
 func executeCommandOnHost(hostSession HostConnection, cmd string, wg *sync.WaitGroup) *CommandResponse {
 	defer wg.Done()
 

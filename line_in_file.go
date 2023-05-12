@@ -8,9 +8,9 @@ type LineInFileConfig struct {
 	Absent     bool
 }
 
-// LineInFile checks if a line is present in a file
-// If absent is true, the line will be removed from the file if it exists or nothing will be done
-// If absent is false, if file does not exist, it will be created with the line
+// LineInFile checks if a line is present in a file.
+// If absent is true, the line will be removed from the file if it exists or nothing will be done.
+// If absent is false, if file does not exist, it will be created with the line.
 func (p *Parallexe) LineInFile(path string, line string, config *LineInFileConfig) (*CommandResponses, error) {
 	commands := ""
 
