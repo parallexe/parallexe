@@ -1,28 +1,29 @@
 package parallexe
 
 import (
-	"fmt"
 	"testing"
 )
 
-func TestParallexe(t *testing.T) {
-	pexe, err := New([]HostConfig{{
-		Host: "localhost",
-		SshConfig: &SshConfig{
-			User: "root",
-		}},
+func TestNew(t *testing.T) {
+	t.Run("Test with empty host config", func(t *testing.T) {
+		_, err := New([]HostConfig{})
+		if err != nil {
+			t.Fatalf("Error during Parallexe creation: %v", err)
+		}
 	})
 
-	if err != nil {
-		panic(err)
-	}
+	t.Run("Test with one host config", func(t *testing.T) {
+		pexe, err := New([]HostConfig{{Host: "localhost"}})
+		if err != nil {
+			t.Fatalf("Error during Parallexe creation: %v", err)
+		}
 
-	defer pexe.Close()
+		if pexe == nil {
+			t.Fatalf("Parallexe is nil")
+		}
 
-	response, err := pexe.LineInFile("./tutu.txt", "tata", &LineInFileConfig{
-		ExecConfig: nil,
-		Absent:     false,
+		if len(pexe.HostConnections) != 1 {
+			t.Fatalf("Parallexe hosts length is not 1")
+		}
 	})
-	fmt.Printf("%+v", response)
-	fmt.Printf("%+v", err)
 }

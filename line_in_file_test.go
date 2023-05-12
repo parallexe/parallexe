@@ -150,3 +150,75 @@ func TestLineInFileRemoveLine(t *testing.T) {
 		t.Fatalf("File should not exist")
 	}
 }
+
+func ExampleParallexe_LineInFile_add() {
+	pexe, err := New([]HostConfig{{Host: "localhost"}})
+	if err != nil {
+		panic(err)
+	}
+	defer pexe.Close()
+
+	// Create tmp file
+	file, err := os.CreateTemp("", "testfile")
+	if err != nil {
+		panic(err)
+	}
+	defer os.Remove(file.Name())
+
+	// Write content in tmp file
+	file.WriteString("toto")
+
+	// Add line in tmp file
+	_, err = pexe.LineInFile(file.Name(), "tata", &LineInFileConfig{
+		ExecConfig: nil,
+		Absent:     false,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	// Check if tmp file contains "tata"
+	content, err := os.ReadFile(file.Name())
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(strings.Contains(string(content), "toto\ntata"))
+	// Output: true
+}
+
+func ExampleParallexe_LineInFile_remove() {
+	pexe, err := New([]HostConfig{{Host: "localhost"}})
+	if err != nil {
+		panic(err)
+	}
+	defer pexe.Close()
+
+	// Create tmp file
+	file, err := os.CreateTemp("", "testfile")
+	if err != nil {
+		panic(err)
+	}
+	defer os.Remove(file.Name())
+
+	// Write content in tmp file
+	file.WriteString("toto\ntata")
+
+	// Remove line in tmp file
+	_, err = pexe.LineInFile(file.Name(), "tata", &LineInFileConfig{
+		ExecConfig: nil,
+		Absent:     true,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	// Check if tmp file contains "tata"
+	content, err := os.ReadFile(file.Name())
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(strings.Contains(string(content), "tata"))
+	// Output: false
+}

@@ -130,5 +130,76 @@ func TestSend(t *testing.T) {
 		}
 
 	})
+}
 
+func ExampleParallexe_Send_copy() {
+	pexe, err := New([]HostConfig{{Host: "localhost"}})
+	if err != nil {
+		panic(err)
+	}
+	defer pexe.Close()
+
+	file, err := os.CreateTemp("", "testfile")
+	if err != nil {
+		panic(err)
+	}
+	defer os.Remove(file.Name())
+	file.WriteString("toto\n")
+
+	// Check if file is correctly sent
+	destCopyFile := fmt.Sprintf("%s/%s", os.TempDir(), "destFile")
+	defer os.Remove(destCopyFile)
+
+	_, err = pexe.Send(file.Name(), destCopyFile, &SendConfig{
+		ExecConfig:      nil,
+		CompileTemplate: false,
+		IgnoreIfExists:  false,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	content, err := os.ReadFile(destCopyFile)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(content))
+	// Output: toto
+}
+
+func ExampleParallexe_Send_template() {
+	pexe, err := New([]HostConfig{{Host: "localhost"}})
+	if err != nil {
+		panic(err)
+	}
+	defer pexe.Close()
+
+	file, err := os.CreateTemp("", "testfile")
+	if err != nil {
+		panic(err)
+	}
+	defer os.Remove(file.Name())
+	file.WriteString("{{ .Name }}\n")
+
+	// Check if file is correctly sent
+	destCopyFile := fmt.Sprintf("%s/%s", os.TempDir(), "destFile")
+	defer os.Remove(destCopyFile)
+
+	_, err = pexe.Send(file.Name(), destCopyFile, &SendConfig{
+		ExecConfig:      nil,
+		CompileTemplate: true,
+		ExecVariables:   &ExecVariables{Variables: KeyValueVariable{"Name": "tutu"}},
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	content, err := os.ReadFile(destCopyFile)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(content))
+	// Output: tutu
 }
