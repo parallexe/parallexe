@@ -1,6 +1,8 @@
 package parallexe
 
 import (
+	"fmt"
+	"os"
 	"testing"
 )
 
@@ -135,6 +137,52 @@ func TestGetFilteredHosts(t *testing.T) {
 		})
 		if len(result) != 4 {
 			t.Errorf("Expected 4 hosts, got %d", len(result))
+		}
+	})
+}
+
+func TestExec(t *testing.T) {
+	pexe, err := New([]HostConfig{{Host: "localhost"}})
+	if err != nil {
+		panic(err)
+	}
+	defer pexe.Close()
+
+	t.Run("test exec", func(t *testing.T) {
+		tmpFileDest := fmt.Sprintf("%s%s", os.TempDir(), "testfile")
+		defer os.Remove(tmpFileDest)
+
+		pexe.Exec(fmt.Sprintf("touch %s", tmpFileDest), nil)
+		if _, err := os.Stat(tmpFileDest); os.IsNotExist(err) {
+			t.Errorf("Expected file %s to exist", tmpFileDest)
+		}
+	})
+}
+
+func TestMultiExec(t *testing.T) {
+	pexe, err := New([]HostConfig{{Host: "localhost"}})
+	if err != nil {
+		panic(err)
+	}
+	defer pexe.Close()
+
+	t.Run("test multi exec", func(t *testing.T) {
+		tmpFile1Dest := fmt.Sprintf("%s%s", os.TempDir(), "testfile1")
+		defer os.Remove(tmpFile1Dest)
+		tmpFile2Dest := fmt.Sprintf("%s%s", os.TempDir(), "testfile2")
+		defer os.Remove(tmpFile2Dest)
+
+		commands := []string{
+			fmt.Sprintf("touch %s", tmpFile1Dest),
+			fmt.Sprintf("touch %s", tmpFile2Dest),
+		}
+
+		pexe.MultiExec(commands, nil)
+		if _, err := os.Stat(tmpFile1Dest); os.IsNotExist(err) {
+			t.Errorf("Expected file %s to exist", tmpFile1Dest)
+		}
+		if _, err := os.Stat(tmpFile2Dest); os.IsNotExist(err) {
+			t.Errorf("Expected file %s to exist", tmpFile2Dest)
 		}
 	})
 }
